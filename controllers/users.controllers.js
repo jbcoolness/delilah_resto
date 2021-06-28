@@ -2,16 +2,20 @@ const sequelize = require('../conexion.js');
 
 const registerUser = async (req, res) => {
     const { user, full_name, email, phone, address, password} = req.body;
-    let dataInsertUser = [`${user}`, `${full_name}`, `${email}`, `${phone}`, `${address}`, `${password}`];
-    console.log(dataInsertUser)
+    // let dataInsertUser = [`${user}`, `${full_name}`, `${email}`, `${phone}`, `${address}`, `${password}`];
+    // console.log(dataInsertUser)
 
     try {
-        const result = await sequelize.query("INSERT INTO users(`user`, full_name, email, phone, address, password) VALUES (?, ?, ?, ?, ?, ?);",
-        { replacement: dataInsertUser, type: sequelize.QueryTypes.INSERT })
-        console.log(result);
+        const resultInsertUser = await sequelize.query(`INSERT INTO users(user, full_name, email, phone, address, password) VALUES ('${user}', '${full_name}', '${email}', '${phone}', '${address}', '${password}');`,
+        { type: sequelize.QueryTypes.INSERT })
+        const resultInserRol = await sequelize.query("insert into users_roles  values (last_insert_id(), 2);",
+        { type: sequelize.QueryTypes.INSERT })
+
+        console.log(resultInsertUser);
+        console.log(resultInserRol);
         res.status(201).json({
             'msg': true,
-            'usuario': result
+            'usuario': resultInsertUser
         })
 
     } catch (error) {
@@ -30,10 +34,8 @@ const validarEmail = (email) => {
 
 const loginUser = async (req, res) => {
     const { user_email, password} = req.body;
-
-    // console.log(req.isEmail)
     try {
-        console.log(user_email)
+        console.log(user_email)        
         const result = await sequelize.query(`select * from users u where (email = '${user_email}' or user = '${user_email}') and password = '${password}';`,
         { type: sequelize.QueryTypes.SELECT });
         console.log(result)
@@ -45,7 +47,7 @@ const loginUser = async (req, res) => {
             console.log(error)
             res.status(400).json( {
                 'msg': false,
-                'data': 'usuario no encontrado, valide la información'
+                'data': 'Usuario no encontrado, favor validar informacion'
             })
         }
         
