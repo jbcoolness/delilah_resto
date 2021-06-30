@@ -1,5 +1,6 @@
 const express = require('express');
 const app = express();
+// const jwt = require('jsonwebtoken');
 const port = 3000;
 const seqielize = require('./conexion');
 
@@ -23,5 +24,3 @@ app.use('/api/v1/users', usersRoutes);
 app.listen(port, () => {
     console.log(`app listening at http://localhost:${port}`);
 });
-
-exports.app = app;
