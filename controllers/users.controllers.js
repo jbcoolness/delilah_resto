@@ -31,11 +31,10 @@ const registerUser = async (req, res) => {
 
 const loginUser = async (req, res) => {
     
-    const { user_email, password} = req.body;
-    const jwtToken = jwt.sign({'user_email':user_email, 'password':password}, process.env.KEY_TOKEN)
+    const { user_email, password} = req.body;    
     try {
         console.log(user_email)        
-        const result = await sequelize.query(`select * from users u where (email = '${user_email}' or user = '${user_email}') and password = '${password}';`,
+        const result = await sequelize.query(`select * from users u where (email = '${user_email}' or user = '${user_email}') and password = '${password}' limit 1;`,
         { type: sequelize.QueryTypes.SELECT });
         console.log(result)
         if (result == '') {
@@ -43,7 +42,8 @@ const loginUser = async (req, res) => {
                 'msg': false,
                 'data': 'Usuario no encontrado, favor validar los datos'
             })
-        } else {            
+        } else {
+            const jwtToken = jwt.sign({'user_email':user_email, 'role_id':result[0].role_id}, process.env.KEY_TOKEN)
             res.status(200).json( {
                 'msg': true,
                 'data': `Bienvenido ${result[0].full_name}`,
