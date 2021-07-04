@@ -26,13 +26,13 @@ const createProducts = async(req, res) => {
 const getProducts = async(req, res) => {
     
     try {
-        const resulGetProducts = await sequelize.query('SELECT * FROM products;',
+        const resultGetProducts = await sequelize.query('SELECT * FROM products;',
         { type:sequelize.QueryTypes.SELECT });
-        console.log(resulGetProducts);
+        console.log(resultGetProducts);
         
         res.status(200).json({
             'msg': true,
-            'data': resulGetProducts[0]
+            'data': resultGetProducts
         })
     } catch (error) {
         console.log(error)
@@ -44,7 +44,34 @@ const getProducts = async(req, res) => {
 };
 
 const updateProducts = async(req, res) => {
-    
+    const {product_name, description, image, price} = req.body;
+
+    try {
+        const resultUpdateProduct = await sequelize.query (`UPDATE products 
+        SET product_name = '${product_name}', description = '${description}', 
+        image = '${image}', price = ${price} WHERE product_id = ${req.params.id}`,
+        { type: sequelize.QueryTypes.INSERT })
+        console.log(resultUpdateProduct[1]);
+
+        if (resultUpdateProduct[1] < 1) {
+            res.status(404).json({
+                "msg": false,
+                "data": "No hubo cambios o coincidencia en el producto"
+            })
+        } else {
+            res.status(201).json({
+                "msg": true,
+                "data": "Producto actualizado correctamente"
+            })
+        }
+        
+    } catch (error) {
+        console.log(error)
+        res.status(400).json({
+            'msg': false,
+            'data': `Se ha producido un error en el procedimiento`
+        });
+    }
 };
 
 const deleteProducts = async(req, res) => {
