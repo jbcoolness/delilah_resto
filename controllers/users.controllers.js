@@ -3,28 +3,25 @@ var jwt = require('jsonwebtoken');
 
 
 const registerUser = async (req, res) => {
-    const { user, full_name, email, phone, address, password} = req.body;
-    let dataInsertUser = [`${user}`, `${full_name}`, `${email}`, `${phone}`, `${address}`, `${password}`];
+    const { user, full_name, email, phone, address, password, role_id} = req.body;
+    // let dataInsertUser = [`${user}`, `${full_name}`, `${email}`, `${phone}`, `${address}`, `${password}`];
     // console.log(dataInsertUser)
 
     try {
-        const resultInsertUser = await sequelize.query(`INSERT INTO users(user, full_name, email, phone, address, password) VALUES ('${user}', '${full_name}', '${email}', '${phone}', '${address}', '${password}');`,
-        { type: sequelize.QueryTypes.INSERT })
-        const resultInserRol = await sequelize.query("insert into users_roles  values (last_insert_id(), 2);",
-        { type: sequelize.QueryTypes.INSERT })
-
+        const resultInsertUser = await sequelize.query(`INSERT INTO users(user, full_name, email, phone, address, password) VALUES ('${user}', '${full_name}', '${email}', '${phone}', '${address}', '${password}, '${role_id}');`,
+        { type: sequelize.QueryTypes.INSERT });
         console.log(resultInsertUser);
-        console.log(resultInserRol);
+
         res.status(201).json({
             'msg': true,
-            'usuario': resultInsertUser
+            'data': `Registrado usuario: ${result[0].user} con exito`
         })
 
     } catch (error) {
         console.log(error);
         res.status(400).json({
             'msg': false,
-            'data': error
+            'data': `Se ha producido un error en el procedimiento`
         })
     }
 };
