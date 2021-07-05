@@ -5,9 +5,9 @@ const createProducts = async(req, res) => {
     const { product_name, description, image, price} = req.body;
 
     try {
-        const resultCreateProduct = await sequelize.query(`INSERT INTO products(product_name, description, image, price) VALUES('${product_name}', '${description}', '${image}', ${price});`, 
+        const resultCreate = await sequelize.query(`INSERT INTO products(product_name, description, image, price) VALUES('${product_name}', '${description}', '${image}', ${price});`, 
         { type: sequelize.QueryTypes.INSER });
-        console.log(resultCreateProduct);
+        console.log(resultCreate);
 
         res.status(201).json({
             'msg': true,
@@ -26,13 +26,13 @@ const createProducts = async(req, res) => {
 const getProducts = async(req, res) => {
     
     try {
-        const resultGetProducts = await sequelize.query('SELECT * FROM products;',
+        const resultGet = await sequelize.query('SELECT * FROM products;',
         { type:sequelize.QueryTypes.SELECT });
-        console.log(resultGetProducts);
+        console.log(resultGet);
         
         res.status(200).json({
             'msg': true,
-            'data': resultGetProducts
+            'data': resultGet
         })
     } catch (error) {
         console.log(error)
@@ -47,13 +47,13 @@ const updateProducts = async(req, res) => {
     const {product_name, description, image, price} = req.body;
 
     try {
-        const resultUpdateProduct = await sequelize.query (`UPDATE products 
+        const resultUpdate = await sequelize.query (`UPDATE products 
         SET product_name = '${product_name}', description = '${description}', 
         image = '${image}', price = ${price} WHERE product_id = ${req.params.id}`,
         { type: sequelize.QueryTypes.INSERT })
-        console.log(resultUpdateProduct[1]);
+        console.log(resultUpdate[1]);
 
-        if (resultUpdateProduct[1] < 1) {
+        if (resultUpdate[1] < 1) {
             res.status(404).json({
                 "msg": false,
                 "data": "No hubo cambios o coincidencia en el producto"
@@ -75,7 +75,20 @@ const updateProducts = async(req, res) => {
 };
 
 const deleteProducts = async(req, res) => {
-    
+    try {
+        const resultDelete = await sequelize.query( `DELETE FROM products WHERE product_id = ${req.params.id}`);
+        console.log(resultDelete)
+        res.status(200).json({
+            "msg": true,
+            "data": "Resgistro eliminado con exito"
+        })
+    } catch (error) {
+        console.log(error)
+        res.status(400).json({
+            'msg': false,
+            'data': `Se ha producido un error en el procedimiento`
+        });
+    }
 };
 
 module.exports = {createProducts, getProducts, updateProducts, deleteProducts}

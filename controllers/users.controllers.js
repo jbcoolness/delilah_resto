@@ -8,13 +8,13 @@ const registerUser = async (req, res) => {
     // console.log(dataInsertUser)
 
     try {
-        const resultInsertUser = await sequelize.query(`INSERT INTO users(user, full_name, email, phone, address, password) VALUES ('${user}', '${full_name}', '${email}', '${phone}', '${address}', '${password}, '${role_id}');`,
+        const resultInsertUser = await sequelize.query(`INSERT INTO users(user, full_name, email, phone, address, password, role_id) VALUES ('${user}', '${full_name}', '${email}', '${phone}', '${address}', '${password}', ${role_id});`,
         { type: sequelize.QueryTypes.INSERT });
         console.log(resultInsertUser);
 
         res.status(201).json({
             'msg': true,
-            'data': `Registrado usuario: ${result[0].user} con exito`
+            'data': `Registrado usuario: ${user} con exito`
         })
 
     } catch (error) {
@@ -81,7 +81,4 @@ const updateUser = async (req, res) => {
 }
 
 
-exports.registerUser = registerUser;
-exports.loginUser = loginUser;
-exports.getUser = getUser;
-exports.updateUser = updateUser;
+module.exports = {registerUser, loginUser, getUser, updateUser}
