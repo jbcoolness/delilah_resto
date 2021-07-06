@@ -3,12 +3,12 @@ var jwt = require('jsonwebtoken');
 
 
 const registerUser = async (req, res) => {
-    const { user, full_name, email, phone, address, password, role_id} = req.body;
+    const { user, full_name, email, phone, address, password} = req.body;
     // let dataInsertUser = [`${user}`, `${full_name}`, `${email}`, `${phone}`, `${address}`, `${password}`];
     // console.log(dataInsertUser)
 
     try {
-        const resultInsertUser = await sequelize.query(`INSERT INTO users(user, full_name, email, phone, address, password, role_id) VALUES ('${user}', '${full_name}', '${email}', '${phone}', '${address}', '${password}', ${role_id});`,
+        const resultInsertUser = await sequelize.query(`INSERT INTO users(user, full_name, email, phone, address, password, role_id) VALUES ('${user}', '${full_name}', '${email}', '${phone}', '${address}', '${password}', 2);`,
         { type: sequelize.QueryTypes.INSERT });
         console.log(resultInsertUser);
 

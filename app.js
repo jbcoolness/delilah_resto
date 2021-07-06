@@ -6,20 +6,17 @@ const seqielize = require('./conexion');
 
 //Routes
 const usersRoutes = require('./routers/users.routes');
-const productsRoutes = require('./routers/products.routes')
+const productsRoutes = require('./routers/products.routes');
+const ordersRoutes = require('./routers/orders.routes');
 
-// Middleware
+// Global Middleware
 app.use(express.json());
-// valida si se está logiando con correo electrónico
-// const isEmail = (req, res, next) => {
-//     expr = /^([a-zA-Z0-9_\.\-])+\@(([a-zA-Z0-9\-])+\.)+([a-zA-Z0-9]{2,4})+$/;
-//     if ( !expr.test(req.body.email) ) { req.isEmail = false } else { req.isEmail = true };
-//     next()
-// }
+
 
 // Routes use
 app.use('/api/v1/users', usersRoutes);
 app.use('/api/v1/products', productsRoutes);
+app.use('/api/v1/orders', ordersRoutes);
 
 
 // Server
