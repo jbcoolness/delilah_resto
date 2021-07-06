@@ -90,5 +90,9 @@ const createOrders = async (req, res) => {
     
 };
 
+const getOrders = async (req, res) => {
 
-module.exports = { createOrders };
+}
+
+
+module.exports = { createOrders, getOrders };

@@ -40,7 +40,9 @@ const loginUser = async (req, res) => {
                 'data': 'Usuario no encontrado, favor validar los datos'
             })
         } else {
-            const jwtToken = jwt.sign({'user_email':user_email, 'role_id':result[0].role_id}, process.env.KEY_TOKEN)
+            const jwtToken = jwt.sign({'user_email':user_email, 'role_id':result[0].role_id}, 
+                                        process.env.KEY_TOKEN, { expiresIn: '1h' });
+
             res.status(200).json( {
                 'msg': true,
                 'data': `Bienvenido ${result[0].full_name}`,
