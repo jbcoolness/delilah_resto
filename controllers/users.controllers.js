@@ -41,7 +41,7 @@ const loginUser = async (req, res) => {
             })
         } else {
             const jwtToken = jwt.sign({'user_email':user_email, 'role_id':result[0].role_id}, 
-                                        process.env.KEY_TOKEN, { expiresIn: '1h' });
+                                        process.env.KEY_TOKEN, { expiresIn: process.env.EXPIRES });
 
             res.status(200).json( {
                 'msg': true,
