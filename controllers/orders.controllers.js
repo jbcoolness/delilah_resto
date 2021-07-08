@@ -96,8 +96,8 @@ const getOrders = async (req, res) => {
     console.log(req.decoded)
     if(req.decoded.role_id == 1) {
         try {
-            const result = await sequelize.query(`SELECT op.order_product_id, o.order_id, s.state, o.date_order, p.product_name, 
-                                op.quantity, pt.payment_type, o.price price_order, u.full_name, u.address 
+            const result = await sequelize.query(`SELECT o.order_id, s.state, o.date_order, p.product_name, 
+                                op.quantity, pt.payment_type, o.price price_order, u.user_id, u.full_name, u.address 
                                 FROM orders o 
                                 LEFT JOIN orders_products op USING (order_id)
                                 LEFT JOIN states s USING (state_id)
@@ -147,8 +147,42 @@ const getOrders = async (req, res) => {
     }    
 
 }
+const getIdOrdersAdmin = async (req, res) => {
+    try {
+        const result = await sequelize.query(`SELECT o.order_id, s.state, o.date_order, p.product_name, 
+                            op.quantity, pt.payment_type, o.price price_order, u.user_id, u.full_name, u.address 
+                            FROM orders o 
+                            LEFT JOIN orders_products op USING (order_id)
+                            LEFT JOIN states s USING (state_id)
+                            LEFT JOIN payment_type pt USING (payment_type_id)
+                            LEFT JOIN users u USING (user_id)
+                            LEFT JOIN products p USING (product_id)
+                            WHERE u.user_id = ${req.params.user}
+                            AND o.order_id = ${req.params.order};`,
+                            {type:sequelize.QueryTypes.SELECT});
+            
+        if(result.length < 1) {
+            return res.status(404).json({
+                    "msg": false,
+                    "data": "Orden no encontrada o no relacionado con el usuario"
+            })
+        }else {
+            return res.status(200).json({
+                    "msg": true,
+                    "data": result
+            })
+        }
+        
+    } catch (error) {
+        console.log(error)
+        res.status(400).json({
+            'msg': false,
+            "data": error
+        })
+    }
+}
 
-const getIdOrders = async (req, res) => {
+const getIdOrdersClient = async (req, res) => {
     console.log(req.decoded)
     
     try {
@@ -186,10 +220,32 @@ const getIdOrders = async (req, res) => {
 }
 
 const updateOrders = async (req, res) => {
-    
+    const {newStateId} =  req.body;
+
+    try {
+        const resultUpdate = await sequelize.query(`UPDATE orders 
+                            SET state_id = ${newStateId} WHERE order_id = ${req.params.id}`,
+                            { type: sequelize.QueryTypes.INSERT });
+        console.log(resultUpdate[1]);
+
+        if (resultUpdate[1] < 1) {
+            res.status(404).json({
+                "msg": false,
+                "data": "No hubo cambios o coincidencia en la orden"
+            })
+        } else {
+            res.status(201).json({
+                "msg": true,
+                "data": "Estado de la orden actualizado correctamente"
+            })
+        }
+    } catch (error) {
+        
+    }
+
 }
 
 
 
 
-module.exports = { createOrders, getOrders, getIdOrders, updateOrders };
+module.exports = { createOrders, getOrders, getIdOrdersClient, getIdOrdersAdmin, updateOrders };
