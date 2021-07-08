@@ -1,3 +1,4 @@
+// const { QueryTypes } = require("sequelize/types");
 const sequelize = require("../conexion.js");
 
 
@@ -92,6 +93,60 @@ const createOrders = async (req, res) => {
 };
 
 const getOrders = async (req, res) => {
+    console.log(req.decoded)
+    if(req.decoded.role_id == 1) {
+        try {
+            const result = await sequelize.query(`SELECT o.order_id, s.state, o.date_order, p.product_name, 
+                                op.quantity, pt.payment_type, o.price price_order, u.full_name, u.address 
+                                FROM orders o 
+                                LEFT JOIN orders_products op USING (order_id)
+                                LEFT JOIN states s USING (state_id)
+                                LEFT JOIN payment_type pt USING (payment_type_id)
+                                LEFT JOIN users u USING (user_id)
+                                LEFT JOIN products p USING (product_id);`,
+                                {type:sequelize.QueryTypes.SELECT});
+            // console.log(result)
+    
+            res.status(200).json({
+                "msg": true,
+                "data": result
+            })
+        } catch (error) {
+            console.log(error)
+            res.status(400).json({
+                'msg': false,
+                "data": error
+            })
+        }
+
+    }else {
+        try {
+            const result = await sequelize.query(`SELECT o.order_id, s.state, o.date_order, p.product_name, 
+                                op.quantity, pt.payment_type, o.price price_order, u.full_name, u.address 
+                                FROM orders o 
+                                LEFT JOIN orders_products op USING (order_id)
+                                LEFT JOIN states s USING (state_id)
+                                LEFT JOIN payment_type pt USING (payment_type_id)
+                                LEFT JOIN users u USING (user_id)
+                                LEFT JOIN products p USING (product_id)
+                                WHERE u.user_id = ${req.decoded.user_id};`,
+                                {type:sequelize.QueryTypes.SELECT});
+            // console.log(result)
+    
+            res.status(200).json({
+                "msg": true,
+                "data": result
+            })
+        } catch (error) {
+            console.log(error)
+            res.status(400).json({
+                'msg': false,
+                "data": error
+            })
+        }
+    }
+
+    
 
 }
 

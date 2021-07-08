@@ -3,12 +3,12 @@ const router = express.Router();
 const productsControllers = require('../controllers/products.controllers');
 const middleware = require('../middleware/middleware');
 
-router.get('/', middleware.validationToken, productsControllers.getProducts);
+router.get('/', productsControllers.getProducts);
 
-router.post('/create', middleware.validationAdmin, productsControllers.createProducts);
+router.post('/create', middleware.validationUser, productsControllers.createProducts);
 
-router.put('/update/:id', middleware.validationAdmin, productsControllers.updateProducts);
+router.put('/update/:id', middleware.validationUser, productsControllers.updateProducts);
 
-router.delete('/delete/:id', middleware.validationAdmin, productsControllers.deleteProducts);
+router.delete('/delete/:id', middleware.validationUser, productsControllers.deleteProducts);
 
 module.exports = router
