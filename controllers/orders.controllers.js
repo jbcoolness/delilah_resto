@@ -96,7 +96,7 @@ const getOrders = async (req, res) => {
     console.log(req.decoded)
     if(req.decoded.role_id == 1) {
         try {
-            const result = await sequelize.query(`SELECT o.order_id, s.state, o.date_order, p.product_name, 
+            const result = await sequelize.query(`SELECT op.order_product_id, o.order_id, s.state, o.date_order, p.product_name, 
                                 op.quantity, pt.payment_type, o.price price_order, u.full_name, u.address 
                                 FROM orders o 
                                 LEFT JOIN orders_products op USING (order_id)
@@ -144,11 +144,52 @@ const getOrders = async (req, res) => {
                 "data": error
             })
         }
-    }
-
-    
+    }    
 
 }
 
+const getIdOrders = async (req, res) => {
+    console.log(req.decoded)
+    
+    try {
+        const result = await sequelize.query(`SELECT o.order_id, s.state, o.date_order, p.product_name, 
+                            op.quantity, pt.payment_type, o.price price_order, u.full_name, u.address 
+                            FROM orders o 
+                            LEFT JOIN orders_products op USING (order_id)
+                            LEFT JOIN states s USING (state_id)
+                            LEFT JOIN payment_type pt USING (payment_type_id)
+                            LEFT JOIN users u USING (user_id)
+                            LEFT JOIN products p USING (product_id)
+                            WHERE u.user_id = ${req.decoded.user_id}
+                            AND o.order_id = ${req.params.id};`,
+                            {type:sequelize.QueryTypes.SELECT});
+            
+        if(result.length < 1) {
+            return res.status(404).json({
+                    "msg": false,
+                    "data": "Orden no encontrada o no relacionado con tu usuario"
+            })
+        }else {
+            return res.status(200).json({
+                    "msg": true,
+                    "data": result
+            })
+        }
+        
+    } catch (error) {
+        console.log(error)
+        res.status(400).json({
+            'msg': false,
+            "data": error
+        })
+    }
+}
 
-module.exports = { createOrders, getOrders };
+const updateOrders = async (req, res) => {
+    
+}
+
+
+
+
+module.exports = { createOrders, getOrders, getIdOrders, updateOrders };
