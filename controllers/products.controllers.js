@@ -1,5 +1,5 @@
 const sequelize = require('../conexion.js');
-const jwt = require('jsonwebtoken');
+// const jwt = require('jsonwebtoken');
 
 const createProducts = async(req, res) => {
     const { product_name, description, image, price} = req.body;

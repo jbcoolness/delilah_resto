@@ -4,9 +4,6 @@ var jwt = require('jsonwebtoken');
 
 const registerUser = async (req, res) => {
     const { user, full_name, email, phone, address, password} = req.body;
-    // let dataInsertUser = [`${user}`, `${full_name}`, `${email}`, `${phone}`, `${address}`, `${password}`];
-    // console.log(dataInsertUser)
-
     try {
         const resultInsertUser = await sequelize.query(`INSERT INTO users(user, full_name, email, phone, address, password, role_id) VALUES ('${user}', '${full_name}', '${email}', '${phone}', '${address}', '${password}', 2);`,
         { type: sequelize.QueryTypes.INSERT });
@@ -26,13 +23,14 @@ const registerUser = async (req, res) => {
     }
 };
 
-const loginUser = async (req, res) => {
-    
+const loginUser = async (req, res) => {    
     const { user_email, password} = req.body;    
     try {
         console.log(user_email)        
-        const result = await sequelize.query(`select * from users u where (email = '${user_email}' or user = '${user_email}') and password = '${password}' limit 1;`,
-        { type: sequelize.QueryTypes.SELECT });
+        const result = await sequelize.query(`select * from users u 
+                            where (email = '${user_email}' or user = '${user_email}') 
+                            and password = '${password}' limit 1;`,
+                            { type: sequelize.QueryTypes.SELECT });
         console.log(result)
         if (result == '') {
             res.status(400).json( {
@@ -75,7 +73,7 @@ const getUser = async (req, res) => {
             console.log(error)
             res.status(400).json({
                 'msg': false,
-                data: error
+                'data': "ha ocurrido un error en la informacion ingresada"
             })
         }
     } else {

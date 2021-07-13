@@ -4,7 +4,6 @@ const sequelize = require("../conexion.js");
 
 const createOrders = async (req, res) => {
     const {user_id, payment_type, orders_products} =  req.body;
-    // console.log(orders_products[0].product_id)
     console.log(orders_products.length);   
 
     // Optenemos los ids de los productos de la orden
@@ -17,28 +16,6 @@ const createOrders = async (req, res) => {
     }
     const ids = getIdOrdersProducts(orders_products)
     console.log(ids);
-
-    // Sacamos el Total del valor de la orden o pedido
-    // const totalOrder = async (orders_products)=> {
-    //     let total = 0
-    //     for (let p = 0; p < orders_products.length; p++) {
-    //         try {
-    //             const priceProduct = await sequelize.query(`SELECT price FROM products WHERE product_id = ${orders_products[p].product_id}`,
-    //             { type: sequelize.QueryTypes.SELECT });
-
-    //             // console.log(priceProduct[0].price);
-    //             total = total + (parseFloat(priceProduct[0].price) * parseInt(orders_products[p].quantity));                
-                
-    //         } catch (error) {
-    //             console.log(error)                
-    //         }
-    //     }
-    //     return total;    
-    // }
-    // const price = await totalOrder(orders_products)
-    // console.log(price);
-
-    // Creamos o hacemos el insert de la orden sin el valor del precio total
     try {
         const resultCreateOrder = await sequelize.query(`INSERT INTO orders (user_id, payment_type_id, state_id) 
             VALUES (${user_id}, ${payment_type}, 1)`,
@@ -56,7 +33,7 @@ const createOrders = async (req, res) => {
                 const resultInsertOrderProduct =  await sequelize.query(`INSERT INTO orders_products(order_id, product_id, quantity, price)
                 VALUES (${resultCreateOrder[0]}, ${orders_products[p].product_id}, ${orders_products[p].quantity}, 
                     ${parseFloat(priceProduct[0].price)})`,
-                    { type: sequelize.QueryTypes.SELECT });
+                    { type: sequelize.QueryTypes.INSERT });
                 console.log(resultInsertOrderProduct)
 
             } catch (error) {
