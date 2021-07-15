@@ -59,8 +59,8 @@ const loginUser = async (req, res) => {
 };
 
 const getUser = async (req, res) => {
-    console.log(req.decoded)
-    if(req.decoded.role_id == 1) {
+    console.log(req.params)
+    if(!req.params) {
         try {
             const result = await sequelize.query('SELECT * FROM users', 
             {type:sequelize.QueryTypes.SELECT})
@@ -79,7 +79,7 @@ const getUser = async (req, res) => {
     } else {
         try {
             const result = await sequelize.query(`SELECT * FROM users 
-                                WHERE user_id = ${req.decoded.user_id}`, 
+                                WHERE user_id = ${req.params}`, 
                                 {type:sequelize.QueryTypes.SELECT})
             console.log(result)
             res.status(200).json({
