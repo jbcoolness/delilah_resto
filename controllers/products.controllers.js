@@ -5,8 +5,9 @@ const createProducts = async(req, res) => {
     const { product_name, description, image, price} = req.body;
 
     try {
-        const resultCreate = await sequelize.query(`INSERT INTO products(product_name, description, image, price) VALUES('${product_name}', '${description}', '${image}', ${price});`, 
-        { type: sequelize.QueryTypes.INSERT });
+        const resultCreate = await sequelize.query(`INSERT INTO products(product_name, description, image, price) 
+                                VALUES('${product_name}', '${description}', '${image}', ${price});`, 
+                                { type: sequelize.QueryTypes.INSERT });
         console.log(resultCreate[0]);
 
         res.status(201).json({
