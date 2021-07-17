@@ -59,8 +59,8 @@ const loginUser = async (req, res) => {
 };
 
 const getUser = async (req, res) => {
-    console.log(req.params)
-    if(!req.params) {
+    console.log(req.decoded.user_id)
+    if(req.decoded.user_id == 1) {
         try {
             const result = await sequelize.query('SELECT * FROM users', 
             {type:sequelize.QueryTypes.SELECT})
@@ -73,13 +73,13 @@ const getUser = async (req, res) => {
             console.log(error)
             res.status(400).json({
                 'msg': false,
-                'data': "ha ocurrido un error en la informacion ingresada"
+                'data': "ha ocurrido un error"
             })
         }
     } else {
         try {
             const result = await sequelize.query(`SELECT * FROM users 
-                                WHERE user_id = ${req.params}`, 
+                                WHERE user_id = ${req.decoded.user_id}`, 
                                 {type:sequelize.QueryTypes.SELECT})
             console.log(result)
             res.status(200).json({
@@ -90,16 +90,12 @@ const getUser = async (req, res) => {
             console.log(error)
             res.status(400).json({
                 'msg': false,
-                data: error
+                "data": "Ha ocurrido un error"
             })
         }
     }
     
 }
 
-const updateUser = async (req, res) => {
 
-}
-
-
-module.exports = {registerUser, loginUser, getUser, updateUser}
+module.exports = {registerUser, loginUser, getUser}

@@ -6,42 +6,28 @@ const createOrders = async (req, res) => {
     const {user_id, payment_type, orders_products} =  req.body;
     console.log(orders_products.length);   
 
-    // Optenemos los ids de los productos de la orden
-    // const getIdOrdersProducts = (orders_products) => {
-    //     
-    //     orders_products.forEach(p => {
-    //         idProducts.push(p.product_id)
-    //     });
-    //     return idProducts.toString();
-    // }
-    // const ids = getIdOrdersProducts(orders_products)
-    // console.log(ids);
-    let idsProducts = [];
     let valuesOrderProducts = '';
     let priceTotal = 0;
     try {
+        // Insertamos la orden generada
         const resultCreateOrder = await sequelize.query(`INSERT INTO orders (user_id, payment_type_id, state_id) 
             VALUES (${user_id}, ${payment_type}, 1)`,
             { type: sequelize.QueryTypes.INSERT });
         console.log(resultCreateOrder[0]);
 
-        // Guardamos los productos solicitados en la tabla orders_products con la order_id acabado de generar
-        for (let p = 0; p < orders_products.length; p++) {
-            idsProducts.push(orders_products[p].product_id)
-
+        // Preparamos los productos de la orden creada
+        for (let p = 0; p < orders_products.length; p++) {    
+            // Consultamos el precio de cada producto solicitado
             try {
                 const priceProduct = await sequelize.query(`SELECT price FROM products 
                     WHERE product_id = ${orders_products[p].product_id}`,
                     { type: sequelize.QueryTypes.SELECT });
                 console.log(priceProduct[0])
 
+                // Acumulamos los datos de cada producto para hacer un Bulk insert
                 valuesOrderProducts = valuesOrderProducts + `(${resultCreateOrder[0]}, ${orders_products[p].product_id}, ${orders_products[p].quantity}, ${parseFloat(priceProduct[0].price)}),`
-                // const resultInsertOrderProduct =  await sequelize.query(`INSERT INTO orders_products(order_id, product_id, quantity, price)
-                // VALUES (${resultCreateOrder[0]}, ${orders_products[p].product_id}, ${orders_products[p].quantity}, 
-                //     ${parseFloat(priceProduct[0].price)})`,
-                //     { type: sequelize.QueryTypes.INSERT });
-                // console.log(resultInsertOrderProduct)
 
+                // Guardamos el precio total de la orden sumando cada producto
                 priceTotal = priceTotal + (parseFloat(priceProduct[0].price) * parseInt(orders_products[p].quantity))
                 console.log(priceTotal)
 
@@ -60,13 +46,7 @@ const createOrders = async (req, res) => {
         const resultInsertOrderProduct =  await sequelize.query(`INSERT INTO orders_products(order_id, product_id, quantity, price)
                 VALUES ${valuesOP};`,
                     { type: sequelize.QueryTypes.INSERT });
-                console.log(resultInsertOrderProduct)
-
-        // sacamos el valor total de la orden generada
-        // const priceOrder = await sequelize.query(`SELECT SUM(p.price * o.quantity) AS price_total FROM orders_products o 
-        //     LEFT JOIN products p USING (product_id) WHERE p.product_id in (${ids}) AND order_id = ${resultCreateOrder[0]}`,
-        //     { type: sequelize.QueryTypes.SELECT });
-        // console.log(parseFloat(priceOrder[0].price_total));
+                console.log(resultInsertOrderProduct);
 
         // Actualizamos o insertamos el valor total de la orden generada
         const insertPriceTotalOrder = await sequelize.query(`UPDATE orders SET price = ${priceTotal}
@@ -87,12 +67,6 @@ const createOrders = async (req, res) => {
         })
         
     }   
-    
-    // res.status(201).json({
-    //     "msg":true,
-    //     "data": "Respuesta desde el Create order"
-    // })
-    
 };
 
 const getOrders = async (req, res) => {
@@ -108,8 +82,7 @@ const getOrders = async (req, res) => {
                                 LEFT JOIN users u USING (user_id)
                                 LEFT JOIN products p USING (product_id);`,
                                 {type:sequelize.QueryTypes.SELECT});
-            // console.log(result)
-    
+        
             res.status(200).json({
                 "msg": true,
                 "data": result
@@ -121,11 +94,10 @@ const getOrders = async (req, res) => {
                 "data": error
             })
         }
-
     }else {
         try {
             const result = await sequelize.query(`SELECT o.order_id, s.state, o.date_order, p.product_name, 
-                                op.quantity, pt.payment_type, o.price price_order, u.full_name, u.address 
+                                op.quantity, pt.payment_type, o.price price_order, u.user_id, u.full_name, u.address 
                                 FROM orders o 
                                 LEFT JOIN orders_products op USING (order_id)
                                 LEFT JOIN states s USING (state_id)
@@ -134,8 +106,7 @@ const getOrders = async (req, res) => {
                                 LEFT JOIN products p USING (product_id)
                                 WHERE u.user_id = ${req.decoded.user_id};`,
                                 {type:sequelize.QueryTypes.SELECT});
-            // console.log(result)
-    
+        
             res.status(200).json({
                 "msg": true,
                 "data": result
@@ -147,9 +118,10 @@ const getOrders = async (req, res) => {
                 "data": error
             })
         }
-    }    
-
+    }
 }
+
+
 const getIdOrdersAdmin = async (req, res) => {
     try {
         const result = await sequelize.query(`SELECT o.order_id, s.state, o.date_order, p.product_name, 
@@ -163,19 +135,19 @@ const getIdOrdersAdmin = async (req, res) => {
                             WHERE u.user_id = ${req.params.user}
                             AND o.order_id = ${req.params.order};`,
                             {type:sequelize.QueryTypes.SELECT});
-            
+
         if(result.length < 1) {
             return res.status(404).json({
-                    "msg": false,
-                    "data": "Orden no encontrada o no relacionado con el usuario"
+                "msg": false,
+                "data": "Orden no encontrada o no relacionado con el usuario"
             })
         }else {
             return res.status(200).json({
-                    "msg": true,
-                    "data": result
+                "msg": true,
+                "data": result
             })
         }
-        
+            
     } catch (error) {
         console.log(error)
         res.status(400).json({
@@ -187,38 +159,37 @@ const getIdOrdersAdmin = async (req, res) => {
 
 const getIdOrdersClient = async (req, res) => {
     console.log(req.decoded)
-    
     try {
         const result = await sequelize.query(`SELECT o.order_id, s.state, o.date_order, p.product_name, 
-                            op.quantity, pt.payment_type, o.price price_order, u.full_name, u.address 
-                            FROM orders o 
-                            LEFT JOIN orders_products op USING (order_id)
-                            LEFT JOIN states s USING (state_id)
-                            LEFT JOIN payment_type pt USING (payment_type_id)
-                            LEFT JOIN users u USING (user_id)
-                            LEFT JOIN products p USING (product_id)
-                            WHERE u.user_id = ${req.decoded.user_id}
-                            AND o.order_id = ${req.params.id};`,
-                            {type:sequelize.QueryTypes.SELECT});
+                                op.quantity, pt.payment_type, o.price price_order, u.full_name, u.address 
+                                FROM orders o 
+                                LEFT JOIN orders_products op USING (order_id)
+                                LEFT JOIN states s USING (state_id)
+                                LEFT JOIN payment_type pt USING (payment_type_id)
+                                LEFT JOIN users u USING (user_id)
+                                LEFT JOIN products p USING (product_id)
+                                WHERE u.user_id = ${req.decoded.user_id}
+                                AND o.order_id = ${req.params.order};`,
+                                {type:sequelize.QueryTypes.SELECT});
+                
+            if(result.length < 1) {
+                return res.status(404).json({
+                        "msg": false,
+                        "data": "Orden no encontrada o no relacionado con tu usuario"
+                })
+            }else {
+                return res.status(200).json({
+                        "msg": true,
+                        "data": result
+                })
+            }
             
-        if(result.length < 1) {
-            return res.status(404).json({
-                    "msg": false,
-                    "data": "Orden no encontrada o no relacionado con tu usuario"
-            })
-        }else {
-            return res.status(200).json({
-                    "msg": true,
-                    "data": result
-            })
-        }
-        
     } catch (error) {
-        console.log(error)
-        res.status(400).json({
-            'msg': false,
-            "data": error
-        })
+            console.log(error)
+            res.status(400).json({
+                'msg': false,
+                "data": "ha ocurrido un error en el procedimiento"
+            })
     }
 }
 
