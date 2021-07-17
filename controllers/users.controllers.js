@@ -2,8 +2,15 @@ const sequelize = require('../conexion.js');
 var jwt = require('jsonwebtoken');
 
 
-const registerUser = async (req, res) => {
+const registerUser = async (req, res) => {    
     const { user, full_name, email, phone, address, password} = req.body;
+    if (!user || !full_name || !email || !phone || !address || !password){
+        return res.status(404).json({
+            'msg': false,
+            'data': "Es necesario anexar todos los campos para crear el usuario"
+        })
+
+    }
     try {
         const resultInsertUser = await sequelize.query(`INSERT INTO users(user, full_name, email, phone, address, password, role_id) VALUES ('${user}', '${full_name}', '${email}', '${phone}', '${address}', '${password}', 2);`,
         { type: sequelize.QueryTypes.INSERT });
@@ -24,7 +31,14 @@ const registerUser = async (req, res) => {
 };
 
 const loginUser = async (req, res) => {    
-    const { user_email, password} = req.body;    
+    const { user_email, password} = req.body;
+    if (!user_email || !password){
+        return res.status(404).json({
+            'msg': false,
+            'data': "Es necesario anexar todos los campos para acceder"
+        })
+
+    }    
     try {
         console.log(user_email)        
         const result = await sequelize.query(`select * from users u 
