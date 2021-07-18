@@ -32,14 +32,13 @@ Este proyecto plantea la creación de un sistema (backend - API) de pedidos onli
 ## Indicaciones de uso o puesta en marcha de la API :computer:
 
 1. clonar o copiar el proyecto: :floppy_disk:
-
-    En la terminal, cmd, consola o linea de comando: 
+    - En la terminal, cmd, consola o linea de comando: 
 ```sh
 git clone https://github.com/jbcoolness/delilah_resto.git
 ```
 
 2. Instalando dependencias: :sparkle:
-    Dentro de la ruta del proyecto 
+    - Dentro de la ruta del proyecto 
 ```sh
 npm i
 ```
@@ -50,16 +49,16 @@ npm i
 4. Variables de entorno :abcd:
     - Es necesario crear un archivo de nombre `.env` donde se almacenaran todas las variables que contengan informacion sensible o de importancia tales como datos de acceso a la base de datos, token, etc. En el repositorio hay un archivo de nombre `.envExample` para tomar de muestra como debemos llamar las variables antes mencionadas.
         - Ejemplo:
-            USER = _usuario de la base de datos_
-            PASSWORD = _contraseña de la base de datos_
-            HOST = _host o direccion de la base de datos_
-            PORT = _puerto en el cual tenemos acceso a la base de datos_
-            DB = _nombre de la base de datos_
-            KEY_TOKEN = _string o cadena de texto con el cual se generará y decodificará nuestro token de acceso_
-            EXPIRES = _Tiempo de duracion o validez del token generado para los usuarios_
+            - USER = _usuario de la base de datos_
+            - PASSWORD = _contraseña de la base de datos_
+            - HOST = _host o direccion de la base de datos_
+            - PORT = _puerto en el cual tenemos acceso a la base de datos_
+            - DB = _nombre de la base de datos_
+            - KEY_TOKEN = _string o cadena de texto con el cual se generará y decodificará nuestro token de acceso_
+            - EXPIRES = _Tiempo de duracion o validez del token generado para los usuarios_
 
 5. Iniciar el Servidor
-    Dentro de la ruta del proyecto podemos iniciar o ejecutar el proyecto de dos maneras, en nuestra consola de comandos, tipear cualquiera de estos dos comandos:
+    - Dentro de la ruta del proyecto podemos iniciar o ejecutar el proyecto de dos maneras, en nuestra consola de comandos, tipear cualquiera de estos dos comandos:
 ```sh
 node app.js
 nodemon app.js
