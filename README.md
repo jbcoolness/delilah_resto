@@ -3,7 +3,7 @@
 ### Objetivo:
 Este proyecto plantea la creación de un sistema (backend - API) de pedidos online para un restaurante.
 
-### Condiciones solicitadas por el cliente
+### Condiciones solicitadas por el cliente :white_check_mark:
 1. Poder registrar un nuevo usuario.
 2. Un usuario debe poder listar todos los productos disponibles.
 3. Un usuario debe poder generar un nuevo pedido al restaurante con un listado de platos que desea.
