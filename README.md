@@ -89,8 +89,8 @@ nodemon app.js
     ### USERS
     - **GET** /api/v1/users/ :bookmark_tabs:
         - body: vacío
-        - header: vacío
-        - descripcion: Nos devuelve el listado de todos los productos registrados en la base de datos
+        - header: {`token`} de rol de adminitrador o cliente
+        - descripcion: Nos devuelve el listado de todos los usuarios registrados en la base de datos si tiene perfil de Admin, pero si es cliente solo muestra la informacion del usuario que la está solicitando 
     - **POST** /api/v1/users/insert/ :white_check_mark:
         - body: {`user`, `full_name`, `email`, `phone`, `address`, `password`}
         - header: vacío
@@ -100,3 +100,24 @@ nodemon app.js
         - header: vacío
         - descripcion: Logea o proporciona acceso al usuario validando la informacion en la base de datos, digitando ya sea su usuario o email y la contraseña
     
+    ### ORDERS
+    - **POST** /api/v1/orders/ :bookmark_tabs:
+        - body: {`user_id`, `payment_type`, `orders_products`, `price`}
+        - header: {`token`} de rol de cliente
+        - descripcion: Crea una orden por parte de ese usuario en la base de datos, con la solicitud o orden relacionado en los campos de body
+    - **GET** /api/v1/orders/ :bookmark_tabs:
+        - body: vacío
+        - header: {`token`} de rol de adminitrador o cliente
+        - descripcion: Nos devuelve el listado de todas las ordenes registradas en la base de datos si el solicitante se logeo con rol de administrador, si tiene rol de cliente solo le devolverá las ordenes relacionadas a ese usuario
+    - **GET** /api/v1/orders/:id :bookmark_tabs:
+        - body: vacío
+        - header: {`token`} de rol de cliente
+        - descripcion: Nos devuelve el detalle de la orden relacionada al id anexado como parametro de ese usuario cliente que está logeado o solicitando
+    - **PATCH** /api/v1/orders/:id :recycle:
+        - body: {`newStateId`}
+        - header: {`token`} de rol de adminitrador
+        - descripcion: Actualiza el estado de la orden relacionada con el id suministrado com parametro 
+    - **GET** /api/v1/orders/:user/:order :bookmark_tabs:
+        - body: vacío
+        - header: {`token`} de rol de adminitrador
+        - descripcion: nos devuelve el detalle de la orden `order` relacionado con el usuario `user` suministrados como parametro en su restectivo orden indicado.

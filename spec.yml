@@ -188,7 +188,7 @@ paths:
       parameters:
       - in: "body"
         name: "order"
-        description: "objeto order que será agregado a la base de datos"
+        description: "objeto order que será agregado a la base de datos, el campo orders_products es un array de objetos con el product_id y quantity, segun la orden o productos que se quieran solicitar"
         required: true
         schema:
           $ref: '#/definitions/Order'
