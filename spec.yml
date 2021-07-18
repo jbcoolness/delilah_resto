@@ -1,0 +1,475 @@
+swagger: '2.0'
+info:
+  description: API para un sistema de pedidos online de un restaurante
+  version: 1.0.0
+  title: Delilah Restó
+  
+  contact:
+    email: julio.bertty@gmail.com
+  license:
+    name: GPL
+    url: https://es.wikipedia.org/wiki/Licencia_de_software_libre
+host: "localhost:3000"
+basePath: "/api/v1/"
+
+tags:
+- name: "products"
+  description: "Todo lo relacionado con los productos o menu del restaurante"
+- name: "users"
+  description: "informacion de los usuarios"
+- name: "orders"
+  description: "acceso de los clientes para generar y validar sus ordenes o pedidos"
+  
+schemes:
+- "http"
+
+paths:
+  /products:
+    get:
+      tags:
+      - "products"
+      summary: "Obtener listados de los productos dispobles"
+      description: "Obtener listados o menú de platos dispobles"
+      produces:
+      - applicaction/json
+      responses:
+        200:
+          description: "true"
+          schema:
+            $ref: '#/definitions/Product'
+    post:
+      tags:
+      - "products"
+      summary: "Crear un nuevo producto o plato en el menu"
+      operationId: "createProducts"
+      consumes:
+      - "application/json"
+      produces:
+      - "application/json"
+      parameters:
+      - in: "body"
+        name: "body"
+        description: "objeto producto que será agregado en el restaurante"
+        required: true
+        schema:
+          $ref: '#/definitions/Product'
+      security:
+        - api_key: []
+      responses:
+        "200":
+          description: "Producto creado con exito"
+        "401":
+          description: "Acceso denegado"
+  /products/{id}:
+    put:
+      tags:
+      - "products"
+      summary: "Actualizar un producto existente"
+      operationId: "updateProducts"
+      consumes:
+      - "application/json"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "id"
+        in: "path"
+        description: "Valor del id (product_id) del producto que será actualizado"
+        required: true
+        type: "integer"
+      - in: "body"
+        name: "body"
+        description: "Valores del objeto producto que será actualizado"
+        required: true
+        schema:
+          $ref: '#/definitions/Product'
+      responses:
+        "200":
+          description: "Producto creado con exito"
+        "404":
+          description: "No hubo cambios o coincidencia en el producto"
+        "401":
+          description: "Token inválida o expiró"
+      security:
+      - api_key: []
+    delete:
+      tags:
+      - "products"
+      summary: "borrar un producto"
+      operationId: "deleteProduct"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "id"
+        in: "path"
+        description: "Valor del id (product_id) del producto que será eliminado"
+        required: true
+        type: "integer"
+      responses:
+        "200":
+          description: "Producto eliminado con exito"
+        "404":
+          description: "No hubo cambios o coincidencia en el producto"
+        "401":
+          description: "Token inválida o expiró"
+      security:
+      - api_key: []
+  /users:
+    get:
+      tags:
+      - "users"
+      summary: "Obtener listados de los usuarios o usuario"
+      produces:
+      - applicaction/json
+      responses:
+        200:
+          description: "true"
+          schema:
+            $ref: '#/definitions/User'
+      security:
+      - api_key: []
+  /users/insert:
+    post:
+      tags:
+      - "users"
+      summary: "Registrar o insertar un nuevo usuario"
+      operationId: "insertUser"
+      consumes:
+      - "application/json"
+      produces:
+      - "application/json"
+      parameters:
+      - in: "body"
+        name: "user"
+        description: "objeto usuario que será agregado a la base de datos"
+        required: true
+        schema:
+          $ref: '#/definitions/User'
+      responses:
+        "201":
+          description: "Usuario registrado con exito"
+        "400":
+          description: "Error en la informacion ingresada"
+      security:
+      - api_key: []
+  /users/login:
+    post:
+      tags:
+      - "users"
+      summary: "logea o da ingreso a un usuario"
+      operationId: "loginUser"
+      consumes:
+      - "application/json"
+      produces:
+      - "application/json"
+      parameters:
+      - in: "body"
+        name: "user_credentials"
+        description: "objeto con las credenciales de usuario para validar en la base de datos"
+        required: true
+        schema:
+          $ref: '#/definitions/UserLogin'
+      responses:
+        "200":
+          description: "Usuario logeado con exito"
+          schema:
+            $ref: '#/definitions/ResLogin'
+        "400":
+          description: "Error en la informacion ingresada"
+  /orders:
+    post:
+      tags:
+      - "orders"
+      summary: "Registrar o crea una nueva orden"
+      operationId: "createOrders"
+      consumes:
+      - "application/json"
+      produces:
+      - "application/json"
+      parameters:
+      - in: "body"
+        name: "order"
+        description: "objeto order que será agregado a la base de datos"
+        required: true
+        schema:
+          $ref: '#/definitions/Order'
+      responses:
+        "201":
+          description: "Orden registrada con exito"
+        "400":
+          description: "Error en la informacion ingresada"
+      security:
+      - api_key: []
+    get:
+      tags:
+      - "orders"
+      summary: "Obtener listados de todas las ordenes de un usuario"
+      operationId: "getOrders"
+      description: "El usuario solo puede acceder a sus ordenes"
+      produces:
+      - applicaction/json
+      responses:
+        200:
+          description: "true"
+          schema:
+            $ref: '#/definitions/Orders'
+      security:
+      - api_key: []
+  /orders/{id}:
+    get:
+      tags:
+      - "orders"
+      summary: "El usuario puede ver en detalle solo una orden especifica"
+      operationId: "getOrdersClient"
+      consumes:
+      - "application/json"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "id"
+        in: "path"
+        description: "Valor del id (order_id) de la oreden que el usuario quiere ver en detalle"
+        required: true
+        type: "integer"
+      responses:
+        "200":
+          description: "El usuruio verá todos los objetos con los productos vinculados a esa orden"
+          schema:
+            $ref: '#/definitions/Orders'
+        "404":
+          description: "Orden no existente del usuario"
+        "401":
+          description: "Token inválida o expiró"
+      security:
+      - api_key: []
+    patch:
+      tags:
+      - "orders"
+      summary: "Actualizar el estado de una orden existente"
+      operationId: "updateOrders"
+      consumes:
+      - "application/json"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "id"
+        in: "path"
+        description: "Valor del id (order_id) de la oreden que le será actualizado el estado por parte de un usuario administrador"
+        required: true
+        type: "integer"
+      - in: "body"
+        name: "newStateId"
+        description: "Nuevo valor del estado"
+        required: true
+        schema:
+          $ref: "#/definitions/UpdateStateOrder"
+      responses:
+        "200":
+          description: "Producto creado con exito"
+        "404":
+          description: "No hubo cambios o coincidencia en el producto"
+        "401":
+          description: "Token inválida o expiró"
+      security:
+      - api_key: []
+  /orders/{user}/{order}:
+    get:
+      tags:
+      - "orders"
+      summary: "El Administrador puede ver en detalle la orden especifica señalada"
+      operationId: "getIdOrdersAdmin"
+      consumes:
+      - "application/json"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "user"
+        in: "path"
+        description: "Valor del id (user_id) que tiene relacionada la orden a detallar"
+        required: true
+        type: "integer"
+      - name: "order"
+        in: "path"
+        description: "Valor del id (order_id) de la oreden que el administrador quiere ver en detalle"
+        required: true
+        type: "integer"
+      responses:
+        "200":
+          description: "true"
+          schema:
+            $ref: '#/definitions/Orders'
+        "404":
+          description: "Orden no existente del usuario"
+        "401":
+          description: "Token inválida o expiró"
+      security:
+      - api_key: []
+securityDefinitions:
+  api_key:
+    type: "apiKey"
+    name: "authorization"
+    in: "header"
+    description: "JWT, Para validar desde este cliente No olvidar anteponer la palabra Bearer antes del token generado en el login Ejm: 'Bearer eylsjglgjlgkadf_jhfjhf.2ñaadff' "
+definitions:
+  Product:
+    type: "object"
+    required:
+      - "product_name"
+      - "description"
+      - "image" 
+      - "price"
+    properties:
+      product_name:
+        type: "string"
+        example: "Bandeja Paisa"
+      description:
+        type: "string"
+      image:
+        type: "string"
+      price:
+        type: "number"
+    xml:
+      name: "Products"
+  User:
+    type: "object"
+    required:
+      - "user"
+      - "full_name"
+      - "email" 
+      - "phone"
+      - "address"
+      - "password"
+    properties:
+      user_id:
+        type: "integer"
+        example: "2"
+      user:
+        type: "string"
+        example: "fulanito"
+      full_name:
+        type: "string"
+        example: "fulanito De tal"
+      email:
+        type: "string"
+        example: "fulanito@mail.com"
+      phone:
+        type: "string"
+        example: "3006547899"
+      address:
+        type: "string"
+        example: "Calle 5 # 45 - 88 sur"
+      password:
+        type: "string"
+        example: "LkjhPo_987S"
+      role_id:
+        type: "integer"
+        description: "rol de cliente o administrador en la aplicacion"
+        enum:
+        - "1"
+        - "2"
+    xml:
+      name: "Users"
+  UserLogin:
+    type: "object"
+    required:
+      - "user_email"
+      - "password"
+    properties:
+      user_email:
+        type: "string"
+        example: "fulanito / fulanito@mail.com"
+      password:
+        type: "string"
+        example: "LkjhPo_987S"
+    xml:
+      name: "UsersLogin"
+  Order:
+    type: "object"
+    required:
+      - "user_id"
+      - "payment_type"
+      - "orders_products"
+    properties:
+      user_id:
+        type: "integer"
+        example: "2"
+      payment_type:
+        type: "integer"
+        example: "1"
+      orders_products:
+        type: "array"
+        items:
+          $ref: "#/definitions/Orders_products"
+    xml:
+      name: "Order"
+  Orders_products:
+    type: "object"
+    required:
+      - "product_id"
+      - "quantity"
+    properties:
+      product_id:
+        type: "integer"
+        example: "2"
+      quantity:
+        type: "integer"
+        example: "1"
+    xml:
+      name: "UsersLogin"
+  UpdateStateOrder:
+    type: "object"
+    properties:
+      newStateId:
+        type: "integer"
+        description: "Los estados que puede tener una order"
+        enum:
+        - "1"
+        - "2"
+        - "3"
+        - "4"
+    xml:
+      name: "UpdateStateOrder"
+  Orders:
+    type: "object"
+    properties:
+      order_id:
+        type: "integer"
+        example: "9"
+      state:
+        type: "string"
+        example: "nuevo"
+      date_order:
+        type: "string"
+        example: "2021-07-17T02:47:18.000Z"
+      product_name:
+        type: "string"
+        example: "Bandeja Paisa"
+      quantity:
+        type: "integer"
+        example: "3"
+      payment_type:
+        type: "string"
+        example: "efectivo"
+      price_order:
+        type: "integer"
+        example: "23000"
+      user_id:
+        type: "integer"
+        example: "4"
+      full_name:
+        type: "string"
+        example: "John Doe"
+      address:
+        type: "string"
+        example: "Avenida siempre viva 745"
+  ResLogin:
+    type: "object"
+    properties:
+      msg:
+        type: "boolean"
+        example: "true"
+      data:
+        type: "string"
+        example: "Bienvenido Fulanito de Tal"
+      token:
+        type: "string"
+        example: "eylkjsrgljsflihsf-,alfjñjfjafljafohqrvqur08tutkwihg"

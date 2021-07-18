@@ -1,9 +1,11 @@
 const express = require('express');
 const app = express();
-// const jwt = require('jsonwebtoken');
-const port = 3000;
-const seqielize = require('./conexion');
 const cors = require('cors')
+const swaggerUi = require('swagger-ui-express');
+const YAML = require('yamljs');
+const swaggerDocument = YAML.load('./spec.yml');
+const port = 3000;
+
 
 //Routes
 const usersRoutes = require('./routers/users.routes');
@@ -19,6 +21,7 @@ app.use(cors());
 app.use('/api/v1/users', usersRoutes);
 app.use('/api/v1/products', productsRoutes);
 app.use('/api/v1/orders', ordersRoutes);
+app.use('/api/v1/docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 
 
 // Server

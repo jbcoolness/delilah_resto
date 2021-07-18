@@ -1,4 +1,3 @@
-// const { QueryTypes } = require("sequelize/types");
 const sequelize = require("../conexion.js");
 
 
