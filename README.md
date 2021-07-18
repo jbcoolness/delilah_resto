@@ -57,7 +57,7 @@ npm i
             - KEY_TOKEN = _string o cadena de texto con el cual se generará y decodificará nuestro token de acceso_
             - EXPIRES = _Tiempo de duracion o validez del token generado para los usuarios_
 
-5. Iniciar el Servidor
+5. Iniciar el Servidor :rocket:
     - Dentro de la ruta del proyecto podemos iniciar o ejecutar el proyecto de dos maneras, en nuestra consola de comandos, tipear cualquiera de estos dos comandos:
 ```sh
 node app.js
@@ -65,6 +65,23 @@ nodemon app.js
 ```
 6. Para entender el funcionamiento de la API dispusimos dos opciones:
     1. Dirigirte a la ruta o endpoint de nuestro proyecto **/api/v1/docs/** donde internamente se encuentra la respectiva documentacion del servicio.
-    2. Ir la sitio web del [Editor de Swagger] (https://editor.swagger.io/) y pegar toda la informacion que se encuentra en el archivo `spec.yml` de nuestro reporsitorio donde de manera externa suministrará de igual forma tal documentacion.
+    2. Ir la sitio web del [Editor de Swagger](https://editor.swagger.io/) y pegar toda la informacion que se encuentra en el archivo `spec.yml` de nuestro reporsitorio donde de manera externa suministrará de igual forma tal documentacion.
 
-7.     
+7. Rutas o Endpoints :link:
+    #### PRODUCTS
+    - **GET** /api/v1/products/ :bookmark_tabs:
+        - body: vacío
+        - header: vacío
+        - descripcion: Nos devuelve el listado de todos los productos registrados en la base de datos
+    - **POST** /api/v1/products/ :white_check_mark:
+        - body: {`product_name`, `description`, `image`, `price`}
+        - header: {`token`} de rol de adminitrador
+        - descripcion: registra o crea un nuevo producto con los datos relacionados en el body
+    - **PUT** /api/v1/products/:id :recycle:
+        - body: {`product_name`, `description`, `image`, `price`}
+        - header: {`token`} de rol de adminitrador
+        - descripcion: actualiza el producto relacionado con el `product_id` suministrado como parametro con los datos indicados en el body
+    - **DELETE** /api/v1/products/:id :negative_squared_cross_mark:
+        - body: vacío
+        - header: {`token`} de rol de adminitrador
+        - descripcion: elimina el producto relacionado con el `product_id` suministrado como parametro
