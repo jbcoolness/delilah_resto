@@ -5,6 +5,8 @@ info:
   title: Delilah Restó
   
   contact:
+    name: Julio Bertty Sierra
+    url: https://www.linkedin.com/in/julio-bertty/
     email: julio.bertty@gmail.com
   license:
     name: GPL
@@ -16,9 +18,9 @@ tags:
 - name: "products"
   description: "Todo lo relacionado con los productos o menu del restaurante"
 - name: "users"
-  description: "informacion de los usuarios"
+  description: "informacion de los usuarios, logear, registrar y ver usuarios solo por parte del admin"
 - name: "orders"
-  description: "acceso de los clientes para generar y validar sus ordenes o pedidos"
+  description: "acceso de los clientes para generar y validar sus ordenes o pedidos y gestion solo por parte del admin"
   
 schemes:
 - "http"
@@ -426,6 +428,8 @@ definitions:
         - "2"
         - "3"
         - "4"
+        - "5"
+        - "6"
     xml:
       name: "UpdateStateOrder"
   Orders:
@@ -436,7 +440,14 @@ definitions:
         example: "9"
       state:
         type: "string"
-        example: "nuevo"
+        description: "Los estados que puede tener una order"
+        enum:
+        - "nuevo"
+        - "confirmado"
+        - "preparando"
+        - "enviando"
+        - "entregando"
+        - "cancelado"
       date_order:
         type: "string"
         example: "2021-07-17T02:47:18.000Z"
