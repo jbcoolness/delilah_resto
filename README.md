@@ -68,7 +68,7 @@ nodemon app.js
     2. Ir la sitio web del [Editor de Swagger](https://editor.swagger.io/) y pegar toda la informacion que se encuentra en el archivo `spec.yml` de nuestro reporsitorio donde de manera externa suministrará de igual forma tal documentacion.
 
 7. Rutas o Endpoints :link:
-    #### PRODUCTS
+    ### PRODUCTS
     - **GET** /api/v1/products/ :bookmark_tabs:
         - body: vacío
         - header: vacío
@@ -85,3 +85,18 @@ nodemon app.js
         - body: vacío
         - header: {`token`} de rol de adminitrador
         - descripcion: elimina el producto relacionado con el `product_id` suministrado como parametro
+
+    ### USERS
+    - **GET** /api/v1/users/ :bookmark_tabs:
+        - body: vacío
+        - header: vacío
+        - descripcion: Nos devuelve el listado de todos los productos registrados en la base de datos
+    - **POST** /api/v1/users/insert/ :white_check_mark:
+        - body: {`user`, `full_name`, `email`, `phone`, `address`, `password`}
+        - header: vacío
+        - descripcion: registra o crea un nuevo usuario con los datos relacionados en el body
+    - **POST** /api/v1/users/login/ :white_check_mark:
+        - body: {`user_email`, `password`}
+        - header: vacío
+        - descripcion: Logea o proporciona acceso al usuario validando la informacion en la base de datos, digitando ya sea su usuario o email y la contraseña
+    

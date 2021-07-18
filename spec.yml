@@ -151,8 +151,6 @@ paths:
           description: "Usuario registrado con exito"
         "400":
           description: "Error en la informacion ingresada"
-      security:
-      - api_key: []
   /users/login:
     post:
       tags:
