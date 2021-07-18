@@ -56,7 +56,7 @@ const createOrders = async (req, res) => {
 
         res.status(201).json({
             "msg":true,
-            "data": "¡Recibimos tu pedido!, puedes seguir tu pedido para saber el estado en que se encuentra"
+            "data": `¡Recibimos tu pedido!, se generó con la orden ${resultCreateOrder[0]}, puedes seguir tu pedido para saber el estado en que se encuentra`
         })
 
     } catch (error) {
@@ -169,7 +169,7 @@ const getIdOrdersClient = async (req, res) => {
                                 LEFT JOIN users u USING (user_id)
                                 LEFT JOIN products p USING (product_id)
                                 WHERE u.user_id = ${req.decoded.user_id}
-                                AND o.order_id = ${req.params.order};`,
+                                AND o.order_id = ${req.params.id};`,
                                 {type:sequelize.QueryTypes.SELECT});
                 
             if(result.length < 1) {

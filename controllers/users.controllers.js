@@ -37,8 +37,8 @@ const loginUser = async (req, res) => {
             'msg': false,
             'data': "Es necesario anexar todos los campos para acceder"
         })
-
-    }    
+    }
+    
     try {
         console.log(user_email)        
         const result = await sequelize.query(`select * from users u 

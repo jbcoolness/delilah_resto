@@ -6,7 +6,7 @@ const middleware = require('../middleware/middleware')
 
 router.post('/', middleware.validationClient, ordersControllers.createOrders);
 router.get('/', middleware.validationUser, ordersControllers.getOrders);
-router.get('/:order', middleware.validationClient, ordersControllers.getIdOrdersClient);
+router.get('/:id', middleware.validationClient, ordersControllers.getIdOrdersClient);
 router.get('/:user/:order', middleware.validationAdmin, ordersControllers.getIdOrdersAdmin);
 router.patch('/:id', middleware.validationAdmin, ordersControllers.updateOrders)
 

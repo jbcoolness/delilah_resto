@@ -2,12 +2,13 @@ var jwt = require('jsonwebtoken');
 
 const validationUser = ((req, res, next) => {
     const token = req.headers['authorization'];
+    console.log(token)
 
     if (token) {
-        const jwtClient = token.split(" ")[1];
-        jwt.verify(jwtClient, process.env.KEY_TOKEN, (err, decoded) => {
-            console.log(err)
+        const jwtToken = token.split(" ")[1];
+        jwt.verify(jwtToken, process.env.KEY_TOKEN, (err, decoded) => {            
             if (err) {
+                console.log(err)
                 return res.status(401).json({ "msg": 'Token inválida o expiró' });            
             } else {
                 req.decoded = decoded
