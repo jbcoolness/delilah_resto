@@ -63,3 +63,8 @@ npm i
 node app.js
 nodemon app.js
 ```
+6. Para entender el funcionamiento de la API dispusimos dos opciones:
+    1. Dirigirte a la ruta o endpoint de nuestro proyecto **/api/v1/docs/** donde internamente se encuentra la respectiva documentacion del servicio.
+    2. Ir la sitio web del [Editor de Swagger] (https://editor.swagger.io/) y pegar toda la informacion que se encuentra en el archivo `spec.yml` de nuestro reporsitorio donde de manera externa suministrará de igual forma tal documentacion.
+
+7.     
