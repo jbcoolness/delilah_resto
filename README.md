@@ -88,7 +88,6 @@ nodemon app.js
         - body: vacío
         - header: {`token`} de rol de adminitrador
         - descripcion: elimina el producto relacionado con el `product_id` suministrado como parametro
----
 
     ### USERS
     - **GET** /api/v1/users/ :bookmark_tabs:
@@ -105,7 +104,6 @@ nodemon app.js
         - body: {`user_email`, `password`}
         - header: vacío
         - descripcion: Logea o proporciona acceso al usuario validando la informacion en la base de datos, digitando ya sea su usuario o email y la contraseña
----    
 
     ### ORDERS
     - **POST** /api/v1/orders/ :bookmark_tabs:
@@ -121,14 +119,14 @@ nodemon app.js
     - **GET** /api/v1/orders/:id :bookmark_tabs:
         - body: vacío
         - header: {`token`} de rol de cliente
-        - descripcion: Nos devuelve el detalle de la orden relacionada al id anexado como parametro de ese usuario cliente que está logeado o solicitando
+        - descripcion: Nos devuelve el detalle de la orden relacionada al id de `order_id` anexado como parametro de ese usuario cliente que está logeado o solicitando el recurso
 
     - **PATCH** /api/v1/orders/:id :recycle:
         - body: {`newStateId`}
         - header: {`token`} de rol de adminitrador
-        - descripcion: Actualiza el estado de la orden relacionada con el id suministrado com parametro 
-        
+        - descripcion: Actualiza el estado de la orden relacionada con el id de `order_id` suministrado por parametro 
+
     - **GET** /api/v1/orders/:user/:order :bookmark_tabs:
         - body: vacío
         - header: {`token`} de rol de adminitrador
-        - descripcion: nos devuelve el detalle de la orden `order` relacionado con el usuario `user` suministrados como parametro en su restectivo orden indicado.
+        - descripcion: nos devuelve el detalle de la orden de `order_id` relacionado con el usuario user de `user_id` suministrados como parametro en su restectivo orden indicado en la ruta.
