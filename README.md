@@ -44,7 +44,8 @@ npm i
 ```
 
 3. Crear la Base de datos :open_file_folder:
-    - Dentro del repositorio hay un archivo de nombre `queriesDb.sql` donde puedes encontrar todas las consultas de manera secuencial que te ayudaran a crear la base de datos y tablas, salvaguardando el respectivo modelo con sus PRIMARY KEYS y FOREING KEYS de cada una.
+    - Dentro del repositorio hay un archivo de nombre `queriesDb.sql` donde puedes encontrar todas las consultas de manera secuencial que te ayudaran a crear la base de datos y tablas, salvaguardando el respectivo modelo con sus PRIMARY KEYS y FOREING KEYS de cada una.   
+
     [:link: Diagrama E/R](https://drive.google.com/file/d/1kTeHU2fdENABD8Fr7yYi6NEFreaet8Wr/view?usp=sharing)
 
 4. Variables de entorno :abcd:
@@ -97,7 +98,7 @@ npm start
         - header: {`token`} de rol de adminitrador o cliente
         - descripcion: Nos devuelve el listado de todos los usuarios registrados en la base de datos si tiene perfil de Admin, pero si es cliente solo muestra la informacion del usuario que la está solicitando 
 
-    - **POST** /api/v1/users/insert/ :white_check_mark:
+    - **POST** /api/v1/users/register/ :white_check_mark:
         - body: {`user`, `full_name`, `email`, `phone`, `address`, `password`}
         - header: vacío
         - descripcion: registra o crea un nuevo usuario con los datos relacionados en el body

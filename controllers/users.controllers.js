@@ -12,7 +12,8 @@ const registerUser = async (req, res) => {
 
     }
     try {
-        const resultInsertUser = await sequelize.query(`INSERT INTO users(user, full_name, email, phone, address, password, role_id) VALUES ('${user}', '${full_name}', '${email}', '${phone}', '${address}', '${password}', 2);`,
+        const resultInsertUser = await sequelize.query(`INSERT INTO users(user, full_name, email, phone, address, password, role_id) 
+                                    VALUES ('${user}', '${full_name}', '${email}', '${phone}', '${address}', '${password}', 2);`,
         { type: sequelize.QueryTypes.INSERT });
         console.log(resultInsertUser);
 

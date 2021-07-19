@@ -129,12 +129,12 @@ paths:
             $ref: '#/definitions/User'
       security:
       - api_key: []
-  /users/insert:
+  /users/register:
     post:
       tags:
       - "users"
       summary: "Registrar o insertar un nuevo usuario"
-      operationId: "insertUser"
+      operationId: "register"
       consumes:
       - "application/json"
       produces:
@@ -339,9 +339,6 @@ definitions:
       - "address"
       - "password"
     properties:
-      user_id:
-        type: "integer"
-        example: "2"
       user:
         type: "string"
         example: "fulanito"
@@ -359,13 +356,7 @@ definitions:
         example: "Calle 5 # 45 - 88 sur"
       password:
         type: "string"
-        example: "LkjhPo_987S"
-      role_id:
-        type: "integer"
-        description: "rol de cliente o administrador en la aplicacion"
-        enum:
-        - "1"
-        - "2"
+        example: "LkjhPo_987S"      
     xml:
       name: "Users"
   UserLogin:
