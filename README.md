@@ -11,7 +11,7 @@ Este proyecto plantea la creación de un sistema (backend - API) de pedidos onli
 5. Un usuario con rol de administrador debe poder realizar las acciones de creación, edición y eliminación de recursos de productos (CRUD de productos).
 6. Un usuario sin roles de administrador no debe poder crear, editar o eliminar un producto, ni editar o eliminar un pedido. Tampoco debe poder acceder a información de otros usuarios.
 
-### Acciones de Usuario tipo Admin
+### Acciones de Usuario tipo Admin :bowtie:
 - Login o registro de identificación en el sistema
 - Obtener listado de platos o productos disponibles
 - Agregar platos o productos
@@ -22,7 +22,7 @@ Este proyecto plantea la creación de un sistema (backend - API) de pedidos onli
 - Obtener listado de todas los usuarios que haya registrados en el sistema
 - Actualizar el estado de una orden
 
-### Acciones de Usuario tipo Client
+### Acciones de Usuario tipo Client :smiley:
 - Login o registro de identificación en el sistema
 - Obtener listado de platos o productos disponibles
 - Obtener listado de solo sus ordenes registradas en el sistema
@@ -45,6 +45,7 @@ npm i
 
 3. Crear la Base de datos :open_file_folder:
     - Dentro del repositorio hay un archivo de nombre `queriesDb.sql` donde puedes encontrar todas las consultas de manera secuencial que te ayudaran a crear la base de datos y tablas, salvaguardando el respectivo modelo con sus PRIMARY KEYS y FOREING KEYS de cada una.
+    [:link: Diagrama E/R](https://drive.google.com/file/d/1kTeHU2fdENABD8Fr7yYi6NEFreaet8Wr/view?usp=sharing)
 
 4. Variables de entorno :abcd:
     - Es necesario crear un archivo de nombre `.env` donde se almacenaran todas las variables que contengan informacion sensible o de importancia tales como datos de acceso a la base de datos, token, etc. En el repositorio hay un archivo de nombre `.envExample` para tomar de muestra como debemos llamar las variables antes mencionadas.
@@ -58,10 +59,11 @@ npm i
             - EXPIRES = _Tiempo de duracion o validez del token generado para los usuarios_
 
 5. Iniciar el Servidor :rocket:
-    - Dentro de la ruta del proyecto podemos iniciar o ejecutar el proyecto de dos maneras, en nuestra consola de comandos, tipear cualquiera de estos dos comandos:
+    - Dentro de la ruta del proyecto podemos iniciar o ejecutar el proyecto de tres maneras, en nuestra consola de comandos, tipear cualquiera de estos comandos:
 ```sh
 node app.js
 nodemon app.js
+npm start
 ```
 6. Para entender el funcionamiento de la API dispusimos dos opciones:
     1. Dirigirte a la ruta o endpoint de nuestro proyecto **/api/v1/docs/** donde internamente se encuentra la respectiva documentacion del servicio.
@@ -106,7 +108,7 @@ nodemon app.js
         - descripcion: Logea o proporciona acceso al usuario validando la informacion en la base de datos, digitando ya sea su usuario o email y la contraseña
 
     ### ORDERS
-    - **POST** /api/v1/orders/ :bookmark_tabs:
+    - **POST** /api/v1/orders/ :white_check_mark:
         - body: {`user_id`, `payment_type`, `orders_products`, `price`}
         - header: {`token`} de rol de cliente
         - descripcion: Crea una orden por parte de ese usuario en la base de datos, con la solicitud o orden relacionado en los campos de body
