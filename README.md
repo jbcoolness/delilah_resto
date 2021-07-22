@@ -114,7 +114,7 @@ npm start
         - body: {`user_email`, `password`}
         - header: vacío
         - descripcion: Logea o proporciona acceso al usuario validando la informacion en la base de datos, digitando ya sea su usuario o email y la contraseña
-    - **DELETE** /api/v1/users/delete/:id :negative_squared_cross_mark:
+    - **DELETE** /api/v1/users/:id :negative_squared_cross_mark:
         - body: vacío
         - header: {`token`} de rol de adminitrador
         - descripcion: elimina el usuario relacionado con el `user_id` suministrado como parametro
