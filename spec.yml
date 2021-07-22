@@ -151,6 +151,30 @@ paths:
           description: "Usuario registrado con exito"
         "400":
           description: "Error en la informacion ingresada"
+  /users/register_admin:
+    post:
+      tags:
+      - "users"
+      summary: "Registrar o insertar un nuevo usuario con roles de administrador"
+      operationId: "registerAdmin"
+      consumes:
+      - "application/json"
+      produces:
+      - "application/json"
+      parameters:
+      - in: "body"
+        name: "user"
+        description: "objeto usuario que será agregado a la base de datos como un ussuario administrador"
+        required: true
+        schema:
+          $ref: '#/definitions/User'
+      responses:
+        "201":
+          description: "Usuario con roles de administrador registrado con exito"
+        "400":
+          description: "Error en la informacion ingresada"
+      security:
+      - api_key: []
   /users/login:
     post:
       tags:
@@ -175,6 +199,31 @@ paths:
             $ref: '#/definitions/ResLogin'
         "400":
           description: "Error en la informacion ingresada"
+  /users/{id}:
+    delete:
+      tags:
+      - "users"
+      summary: "borrar un usuario"
+      operationId: "deleteUser"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "id"
+        in: "path"
+        description: "Valor del id (user_id) del usuario que será eliminado"
+        required: true
+        type: "integer"
+      responses:
+        "200":
+          description: "Usuario eliminado con exito"
+        "400":
+          description: "No esposible eliminarse usted mismo"
+        "404":
+          description: "No hubo coincidencia en el usuario"
+        "401":
+          description: "Token inválida o expiró"
+      security:
+      - api_key: []
   /orders:
     post:
       tags:
@@ -264,9 +313,33 @@ paths:
           $ref: "#/definitions/UpdateStateOrder"
       responses:
         "200":
-          description: "Producto creado con exito"
+          description: "Orden actualizada con exito"
         "404":
           description: "No hubo cambios o coincidencia en el producto"
+        "401":
+          description: "Token inválida o expiró"
+      security:
+      - api_key: []
+    delete:
+      tags:
+      - "orders"
+      summary: "Elimina una orden existente"
+      operationId: "deleteOrders"
+      consumes:
+      - "application/json"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "id"
+        in: "path"
+        description: "Valor del id (order_id) de la oreden que será eliminada por parte de un usuario administrador"
+        required: true
+        type: "integer"
+      responses:
+        "200":
+          description: "Orden eliminada con exito"
+        "404":
+          description: "No hubo cambios o coincidencia en la orden"
         "401":
           description: "Token inválida o expiró"
       security:

@@ -14,8 +14,10 @@ Este proyecto plantea la creación de un sistema (backend - API) de pedidos onli
 ### Acciones de Usuario tipo Admin :bowtie:
 - Login o registro de identificación en el sistema
 - Obtener listado de platos o productos disponibles
+- Agregar o registrar nuevo usuario con rol de administrador
 - Agregar platos o productos
 - Eliminar platos o productos
+- Eliminar Usuario
 - Actualizar platos o productos
 - Obtener listado de todas las ordenes que haya en el sistema
 - Obtener el detalle de una orden relacionada a un usuario o cliente
@@ -103,10 +105,19 @@ npm start
         - header: vacío
         - descripcion: registra o crea un nuevo usuario con los datos relacionados en el body
 
+    - **POST** /api/v1/users/register_admin/ :white_check_mark:
+        - body: {`user`, `full_name`, `email`, `phone`, `address`, `password`}
+        - header: {`token`} de rol de adminitrador
+        - descripcion: registra o crea un nuevo usuario con roles de administrador, mediante los datos relacionados en el body
+
     - **POST** /api/v1/users/login/ :white_check_mark:
         - body: {`user_email`, `password`}
         - header: vacío
         - descripcion: Logea o proporciona acceso al usuario validando la informacion en la base de datos, digitando ya sea su usuario o email y la contraseña
+    - **DELETE** /api/v1/users/delete/:id :negative_squared_cross_mark:
+        - body: vacío
+        - header: {`token`} de rol de adminitrador
+        - descripcion: elimina el usuario relacionado con el `user_id` suministrado como parametro
 
     ### ORDERS
     - **POST** /api/v1/orders/ :white_check_mark:
@@ -128,6 +139,11 @@ npm start
         - body: {`newStateId`}
         - header: {`token`} de rol de adminitrador
         - descripcion: Actualiza el estado de la orden relacionada con el id de `order_id` suministrado por parametro 
+
+    - **DELETE** /api/v1/orders/:id :negative_squared_cross_mark:
+        - body: vacío
+        - header: {`token`} de rol de adminitrador
+        - descripcion: Elimina la orden relacionada con el id de `order_id` suministrado por parametro
 
     - **GET** /api/v1/orders/:user/:order :bookmark_tabs:
         - body: vacío

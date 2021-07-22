@@ -218,7 +218,37 @@ const updateOrders = async (req, res) => {
 
 }
 
+const deleteOrders = async (req, res) => {
+    try {
+        const disableFkChecks = await sequelize.query("SET FOREIGN_KEY_CHECKS=0");
+        
+        const resultDelete = await sequelize.query( `DELETE FROM orders 
+                                    WHERE order_id = ${req.params.id}`);
+        console.log(resultDelete[0].affectedRows)
+        if (resultDelete[0].affectedRows < 1) {
+            res.status(404).json({
+                'msg': false,
+                'data': "Orden no encontrado"
+            });
+
+        }else {
+            res.status(200).json({
+                "msg": true,
+                "data": "Orden eliminada con exito"
+            })
+        }        
+        const enableFkChecks = await sequelize.query("SET FOREIGN_KEY_CHECKS=1");
+
+    } catch (error) {
+        console.log(error)
+        res.status(400).json({
+            'msg': false,
+            'data': `Se ha producido un error en el procedimiento`
+        });
+    }
+}
 
 
 
-module.exports = { createOrders, getOrders, getIdOrdersClient, getIdOrdersAdmin, updateOrders };
+
+module.exports = { createOrders, getOrders, getIdOrdersClient, getIdOrdersAdmin, updateOrders, deleteOrders };
